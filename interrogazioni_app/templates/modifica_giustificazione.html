@@ -43,7 +43,7 @@
 		<th>Note</th>
 	</tr>
 	<tr>
-		<td>{{ giustificazione.inter_id }}</td>
+		<td>{{ giustificazione.giust_id }}</td>
 		<td>{{ giustificazione.studente.nome }}</td>
 		<td>{{ giustificazione.studente.cognome }}</td>
 		<td>{{ giustificazione.data }}</td>
@@ -51,7 +51,7 @@
 	</tr>
 </table>
 <div><br></div>
-<button class="btn btn-primary" onclick="window.location='/giustificazioni/{{ classe }}'">Vai alle giustificazioni</button>
+<button class="btn btn-primary" onclick="window.location='/{{ classe }}/giustificazioni'">Vai alle giustificazioni</button>
 </body>
 </html>
 

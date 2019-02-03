@@ -18,15 +18,23 @@
 		tr:nth-child(even) {
 		  background-color: #dddddd;
 		}
+
+		.giustificato:nth-child(even) {
+			background-color: red;
+		}
+	}
+
 	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 </head>
 <body>
 <h1>Classe {{ classe }}</h1>
 <table>
 	<tr>
-		<th>Numero</th>
-		<th>Cognome</th>
-		<th>Nome</th>
+		<th id="Numero">Numero</th>
+		<th id="Cognome">Cognome</th>
+		<th id="Nome">Nome</th>
+		<th id="Giustifica">Giustificato</th>
 		{% for data in date %}
 			<th>{{ data }}</th>
 		{% endfor %}
@@ -34,12 +42,49 @@
 	{% for entry in matrice %}
 		<tr>
 			{% for cella in entry %}
-				<td>
-					{{ cella }}
-				</td>
+				{% if cella == "G" %}
+					<td class="giustificato"></td>
+				{% else %}
+					<td>{{ cella }}</td>
+				{% endif %}
 			{% endfor %}
 		</tr>
 	{% endfor %}
 </table>
+
+<script type="text/javascript">
+	$("td").on("click", giustifica);
+
+	function giustifica() {
+	    var $td = $(this),
+	        $th = $td.closest('table').find('th').eq($td.index()),
+	        $giust = $td.closest('table').find('td').eq($td.index()+3);
+	    console.log($giust)
+	    if ($td.closest('table').find('th').eq($td.index()).attr("id")=="Giustifica"){
+	    
+	    	var $row = $(this).closest("tr"),// Finds the closest row <tr> 
+				    $id = $row.find("td:nth-child(1)");
+				    $cognome = $row.find("td:nth-child(2)")
+				    $nome = $row.find("td:nth-child(3)")
+				console.log($id.text()+" "+$cognome.text()+" "+$nome.text());
+
+		   	if ($td.context.className=="" || 
+		    		$td.context.className=="non_giustificato"){
+					var confermato=confirm("Sei sicuro di voler giustificare "+$cognome.text()+" "+$nome.text()+" id: "+$id.text())
+			    if (confermato){
+			    	$td.context.className="giustificato"
+			    	window.location.href = "/{{ classe }}/giustificazioni/nuova?stud_id="+$id.text();
+			    }
+
+				}
+			 	else{
+			 		var confermato=confirm("Sei sicuro di voler rimuover la giustificazione di "+$cognome.text()+" "+$nome.text()+" id: "+$id.text())
+			    if (confermato)
+				 		$td.context.className="non_giustificato"
+			 	}
+			}
+	}
+
+</script>
 </body>
 </html>
