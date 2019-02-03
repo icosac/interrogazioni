@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Interrogazioni</title>
+	<style type="text/css">
+		table {
+		  font-family: arial, sans-serif;
+		  border-collapse: collapse;
+		  width: 100%;
+		}
+
+		td, th {
+		  border: 1px solid ;
+		  text-align: left;
+		  padding: 8px;
+		}
+
+		tr:nth-child(even) {
+		  background-color: #dddddd;
+		}
+	</style>
+</head>
+<body>
+<h1>Classe {{ classe }}</h1>
+<table>
+	<tr>
+		<th>Numero</th>
+		<th>Cognome</th>
+		<th>Nome</th>
+		{% for data in date %}
+			<th>{{ data }}</th>
+		{% endfor %}
+	</tr>
+	{% for entry in matrice %}
+		<tr>
+			{% for cella in entry %}
+				<td>
+					{{ cella }}
+				</td>
+			{% endfor %}
+		</tr>
+	{% endfor %}
+</table>
+</body>
+</html>

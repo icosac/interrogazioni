@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Nuova interrogazione</title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<style type="text/css">
+		table {
+		  font-family: arial, sans-serif;
+		  border-collapse: collapse;
+		  width: 100%;
+		}
+
+		td, th {
+		  border: 1px solid ;
+		  text-align: left;
+		  padding: 8px;
+		}
+
+		tr:nth-child(even) {
+		  background-color: #dddddd;
+		}
+
+		button {
+			position: absolute;
+			left: 50%;
+		}
+	</style>
+</head>
+<body>
+<table>
+	<tr>
+		<th>ID</th>
+		<th>Nome</th>
+		<th>Cognome</th>
+		<th>Data</th>
+		<th>Note</th>
+	</tr>
+	<tr>
+		<td>{{ giustificazione.inter_id }}</td>
+		<td>{{ giustificazione.studente.nome }}</td>
+		<td>{{ giustificazione.studente.cognome }}</td>
+		<td>{{ giustificazione.data }}</td>
+		<td>{{ giustificazione.nota }}</td>
+	</tr>
+</table>
+<div><br></div>
+<button class="btn btn-primary" onclick="window.location='/giustificazioni/{{ classe }}'">Vai alle giustificazioni</button>
+</body>
+</html>
+
