@@ -17,24 +17,49 @@
 			left: 50%;
 		}
 	</style>
-</head>
-<body>
-<form id="nuova_interrogazione">
-  Voto:<br>
-  <input type="text" name="voto" value="">
-  <br>
-  Note:<br>
-  <input type="text" name="note" value="">
-  <br><br>
-  <input type="submit" value="Salva" onclick="invia()">
-</form> 
-</body>
+	<script type="text/javascript">
+		function invia (){
+		  var form = document.getElementById("nuova_interrogazione").elements;
+		 	console.log(form);
+		 	var voto = form.namedItem('voto').value,
+		 			note = form.namedItem('note').value;
 
-<script type="text/javascript">
-	function invia (){
-	  var x = document.getElementById("nuova_interrogazione")
-	  console.log(x);
-	}
-</script>
+		 	window.location="/{{ classe_ }}/interrogazioni/nuova?stud_id={{ studente.stud_id }}&voto="+voto+"&nota="+note;
+		}
+	</script>
+</head>
+
+<body>
+<div class="row">
+	<div class="col-sm-2"></div>
+	<div class="col-sm-8 text-center">
+		<h3>
+			Interrogazione di {{ studente.cognome }} {{ studente.nome }}, {{ studente.stud_id }}
+		</h3>		
+	</div>
+	<div class="col-sm-2"></div>
+</div>
+
+<div class="row">
+  <div class="col-sm-4"></div>
+  <div class="text-center col-sm-4 ">
+  	<form id="nuova_interrogazione">
+		  <div class="text-left">
+		  	Voto:<br>
+		  </div>
+		  <input type="text" name="voto" style="width:100%" value="">
+		  <br>
+		  <div class="text-left">
+		  	Note:<br>
+		  </div>
+		  <textarea name="note" style="width:100%" rows="5" maxlength="300"></textarea>
+		</form> 
+		<br>
+		<button value="Salva" onclick="invia()">Salva</button>
+  </div>
+  <div class="col-sm-4"></div>
+</div> 
+
+</body>
 
 </html>

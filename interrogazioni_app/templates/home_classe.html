@@ -11,15 +11,20 @@
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<style>
-		.center {
-			position: absolute;
-			top: 50%;
-			left: 50%;
+		.vertical-center {
+		  margin: 0;
+		  position: absolute;
+		  top: 40%;
+		  left: 50%;
+		  -ms-transform: translateY(+50%);
+		  -ms-transform: translateX(-50%);
+		  transform: translateY(+50%);
+		  transform: translateX(-50%);
 		}
 	</style>
 </head>
 <body>
-	<div class="center">
+	<div class="text-center vertical-center">
 		Classe {{ classe }}<br>
 		<button class="btn btn-primary" onclick="window.location='/{{ classe_ }}/appello'">Appello</button>
 		<div><br></div>

@@ -53,7 +53,13 @@
 	</tr>
 </table>
 <div><br></div>
-<button class="btn btn-primary" onclick="window.location='/{{ classe }}/interrogazioni/'">Vai alle interrogazioni</button>
+<div class="text-center">
+	<div class="btn-group">
+	  <button class="btn btn-primary" onclick="window.location.href = '/{{ classe }}/appello/'">Appello</button>
+	  <button class="btn btn-primary" onclick="window.location.href = '/{{ classe }}/interrogazioni/'">Interrogazioni</button>
+	  <button class="btn btn-primary" onclick="window.location.href = '/{{ classe }}/giustificazioni/'">Giustificazioni</button>
+	</div>
+</div>
 </body>
 </html>
 
