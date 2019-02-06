@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Home</title>
+	<title>Nuova Interrogazione</title>
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -19,13 +19,22 @@
 	</style>
 </head>
 <body>
-	<div class="center">
-		Classe {{ classe }}<br>
-		<button class="btn btn-primary" onclick="window.location='/{{ classe_ }}/appello'">Appello</button>
-		<div><br></div>
-		<button class="btn btn-primary" onclick="window.location='/{{ classe_ }}/interrogazioni'">Interrogazioni</button>
-		<div><br></div>
-		<button class="btn btn-primary" onclick="window.location='/{{ classe_ }}/giustificazioni'">Giustificazioni</button>
-	</div>
+<form id="nuova_interrogazione">
+  Voto:<br>
+  <input type="text" name="voto" value="">
+  <br>
+  Note:<br>
+  <input type="text" name="note" value="">
+  <br><br>
+  <input type="submit" value="Salva" onclick="invia()">
+</form> 
 </body>
+
+<script type="text/javascript">
+	function invia (){
+	  var x = document.getElementById("nuova_interrogazione")
+	  console.log(x);
+	}
+</script>
+
 </html>

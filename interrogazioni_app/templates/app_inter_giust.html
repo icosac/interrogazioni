@@ -1,7 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Interrogazioni</title>
+	<title>{{ titolo }}</title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<style>
 	<style type="text/css">
 		table {
 		  font-family: arial, sans-serif;
@@ -22,19 +31,33 @@
 		.giustificato:nth-child(even) {
 			background-color: red;
 		}
-	}
-
+    .center {
+        margin: auto;   
+        width: 100%;
+    }
 	</style>
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 </head>
+
 <body>
-<h1>Classe {{ classe }}</h1>
-<table>
+<div class="text-center">
+	<h1>Classe {{ classe }}</h1>
+	<div class="btn-group">
+	  <button class="btn {% if titolo == 'Appello' %} btn-secondary {% else %} btn-primary {% endif %}" onclick="window.location.href = '/{{ classe_ }}/appello/'">Appello</button>
+	  <button class="btn {% if titolo == 'Interrogazioni' %} btn-secondary {% else %} btn-primary {% endif %}" onclick="window.location.href = '/{{ classe_ }}/interrogazioni/'">Interrogazioni</button>
+	  <button class="btn {% if titolo == 'Giustificazioni' %} btn-secondary {% else %} btn-primary {% endif %}" onclick="window.location.href = '/{{ classe_ }}/giustificazioni/'">Giustificazioni</button>
+	</div>
+</div>
+<br>
+<table class="center">
 	<tr>
 		<th id="Numero">Numero</th>
 		<th id="Cognome">Cognome</th>
 		<th id="Nome">Nome</th>
-		<th id="Giustifica">Giustificato</th>
+		{% if titolo != "Interrogazioni" %}
+			<th id="Giustifica">Giustificato</th>
+		{% endif %}
 		{% for data in date %}
 			<th>{{ data }}</th>
 		{% endfor %}
@@ -42,7 +65,7 @@
 	{% for entry in matrice %}
 		<tr>
 			{% for cella in entry %}
-				{% if cella == "G" %}
+				{% if cella == "G" and titolo != "Interrogazioni" %}
 					<td class="giustificato"></td>
 				{% else %}
 					<td>{{ cella }}</td>
@@ -54,35 +77,69 @@
 
 <script type="text/javascript">
 	$("td").on("click", giustifica);
+	$("td").on("click", interroga);
 
 	function giustifica() {
-	    var $td = $(this),
-	        $th = $td.closest('table').find('th').eq($td.index()),
-	        $giust = $td.closest('table').find('td').eq($td.index()+3);
-	    console.log($giust)
-	    if ($td.closest('table').find('th').eq($td.index()).attr("id")=="Giustifica"){
-	    
-	    	var $row = $(this).closest("tr"),// Finds the closest row <tr> 
-				    $id = $row.find("td:nth-child(1)");
-				    $cognome = $row.find("td:nth-child(2)")
-				    $nome = $row.find("td:nth-child(3)")
-				console.log($id.text()+" "+$cognome.text()+" "+$nome.text());
+    var $td = $(this),
+        $th = $td.closest('table').find('th').eq($td.index())
+        // $giust = $td.closest('table').find('td').eq($td.index());
+    // if ($td.closest('table').find('th').eq($td.index()).attr("id")=="Giustifica"){
 
-		   	if ($td.context.className=="" || 
-		    		$td.context.className=="non_giustificato"){
-					var confermato=confirm("Sei sicuro di voler giustificare "+$cognome.text()+" "+$nome.text()+" id: "+$id.text())
-			    if (confermato){
-			    	$td.context.className="giustificato"
-			    	window.location.href = "/{{ classe }}/giustificazioni/nuova?stud_id="+$id.text();
-			    }
+    // if ($th.attr("id")=="Giustifica"){    
+    if ($th.attr('id')=="Giustifica"){    
+    	var $row = $(this).closest("tr"),// Finds the closest row <tr> 
+			    $id = $row.find("td:nth-child(1)"),
+			    $cognome = $row.find("td:nth-child(2)"),
+			    $nome = $row.find("td:nth-child(3)");
 
-				}
-			 	else{
-			 		var confermato=confirm("Sei sicuro di voler rimuover la giustificazione di "+$cognome.text()+" "+$nome.text()+" id: "+$id.text())
-			    if (confermato)
-				 		$td.context.className="non_giustificato"
-			 	}
+	   	if ($td.context.className=="" || 
+	    		$td.context.className=="non_giustificato"){
+				var confermato=confirm("Sei sicuro di voler giustificare "+$cognome.text()+" "+$nome.text()+" id: "+$id.text())
+		    if (confermato){
+		    	$td.context.className="giustificato"
+		    	window.location.href = "/{{ classe_ }}/giustificazioni/nuova?stud_id="+$id.text();
+		    }
+
 			}
+		 	else{
+		 		var confermato=confirm("Sei sicuro di voler rimuover la giustificazione di "+$cognome.text()+" "+$nome.text()+" id: "+$id.text());
+		    if (confermato){
+			 		$td.context.className="non_giustificato"
+				 	window.location.href = "/{{ classe_ }}/giustificazioni/rimuovi?stud_id="+$id.text();
+				}
+		 	}
+		}
+	}
+
+	function interroga(){
+		var $td = $(this),
+				$th = $td.closest('table').find('th').eq($td.index()),
+        $inter = $td.closest('table').find('td').eq($td.index());
+
+    if ($th.text()=="Oggi"){
+    	var $row = $(this).closest("tr"),// Finds the closest row <tr> 
+			    $id = $row.find("td:nth-child(1)"),
+			    $cognome = $row.find("td:nth-child(2)"),
+			    $nome = $row.find("td:nth-child(3)");
+
+			var confermato=confirm("Sei sicuro di voler interrogare "+$cognome.text()+" "+$nome.text()+" id: "+$id.text())
+			if (confermato){
+				var win = window.open("/{{ classe_ }}/interrogazioni/crea?stud_id="+$id.text(), '_blank');
+			  win.focus();
+			}
+    }
+    else if ($th.text()!="Oggi" && $th.attr('id')!="Giustifica"){
+    	var $row = $(this).closest("tr"),// Finds the closest row <tr> 
+			    $id = $row.find("td:nth-child(1)"),
+			    $cognome = $row.find("td:nth-child(2)"),
+			    $nome = $row.find("td:nth-child(3)");
+
+			var confermato=confirm("Sei sicuro di voler rimuovere l'interrogazione di "+$cognome.text()+" "+$nome.text()+" id: "+$id.text()+" del "+$th.text());
+			if (confermato){
+				var win = window.open("/{{ classe_ }}/interrogazioni/rimuovi?stud_id="+$id.text()+"&data="+$th.text(), '_blank');
+			  win.focus();
+			}
+    }
 	}
 
 </script>

@@ -15,7 +15,8 @@ def index (request):
 
 def classe(request, _classe):
 	context ={
-		"classe" : _classe,
+		"classe_" : _classe,
+		"classe": ("1A" if _classe=="PA" else "1M"),
 	}
 	return render(request, "home_classe.html", context)
 
@@ -37,18 +38,21 @@ def generic(request, _classe, _interr, _giust):
 	lista_giust=giustificazioni.objects.all() if giustificazioni else [] #Prendi tutte le giustificazioni degli alunni
 
 	date=[] #Prendi tutte le date
+	_date=[]
 	if (_interr):
 		for interrogazione in lista_voti:
 			if not (interrogazione.data in date):
 				date.append(interrogazione.data)
+				_date.append(str(interrogazione.data))
 	if (_giust):
 		for giustificazione in lista_giust:
 			if not (giustificazione.data in date):
 				date.append(giustificazione.data)
+				_date.append(str(giustificazione.data))
 
 	#Crea una matrice con tante colonne quante le date + id, nome, cognome, giustificato e tante righe quanti gli alunni
 	offset=4
-	matrice=[[0 for y in range(len(date)+offset) ] for x in range(len(lista))] #date+id+nome+cognome
+	matrice=[["" for y in range(len(date)+offset) ] for x in range(len(lista))] #date+id+nome+cognome
 
 	for x in range(len(lista)):
 		#Inserisci id, nome, cognome nella matrice	
@@ -68,7 +72,7 @@ def generic(request, _classe, _interr, _giust):
 			# 	else: #Se è già presente un voto, non sovrascriverlo con uno spazio vuoto
 			# 		matrice[x][3+y]="" if matrice[x][3+y]==0 else matrice[x][3+y]
 			
-	return [matrice, date]
+	return [matrice, _date]
 
 def giustificato(stud_id, _classe):
 	classe_giust=PA_GIUSTIFICAZIONI if _classe=="PA" else PM_GIUSTIFICAZIONI
@@ -81,34 +85,56 @@ def giustificato(stud_id, _classe):
 def appello(request, _classe):
 	[matrice, date]=generic(request, _classe, True, True)
 	context={
+		"classe_" : _classe,
 		"classe": ("1A" if _classe=="PA" else "1M"),
 		"date" : date,
 		"matrice" : matrice,
+		"titolo" : "Appello",
 	}
 	return render(request, "app_inter_giust.html", context)
 
 def interrogazioni (request, _classe):
 	[matrice, date] = generic(request, _classe, True, False)
+	_matrice=[["" for x in range(len(matrice[0])) ] for y in range(len(matrice))]
+	for x in range (len(matrice)):
+		for y in range (len(matrice[0])):
+			if y<3:
+				_matrice[x][y]=matrice[x][y]
+			elif y==3:
+				pass
+			else:
+				_matrice[x][y-1]=matrice[x][y]
+
+	date.append("Oggi")
+
 	context={
+		"classe_" : _classe,
 		"classe": ("1A" if _classe=="PA" else "1M"),
 		"date" : date,
-		"matrice" : matrice,
+		"matrice" : _matrice,
+		"titolo" : "Interrogazioni",
 	}
 	return render(request, "app_inter_giust.html", context)
 
 def giustificazioni (request, _classe):
 	[matrice, date] = generic(request, _classe, False, True)
+	_matrice=[["" for x in range(4) ] for y in range(len(matrice))]
+	for x in range(len(matrice)):
+		for y in range(4):
+			_matrice[x][y]=matrice[x][y]
+
 	context={
+		"classe_" : _classe,
 		"classe": ("1A" if _classe=="PA" else "1M"),
-		"date" : date,
-		"matrice" : matrice,
+		"date" : [],
+		"matrice" : _matrice,
+		"titolo" : "Giustificazioni",
 	}
 	return render(request, "app_inter_giust.html", context)
 
 
 def nuova_generic (request, _classe, _interr, _giust):
-	print(_classe)
-	classe=PA if _classe=="1A" else PM
+	classe=PA if _classe=="PA" else PM
 	if (_interr):
 		classe_interr=PA_INTERROGAZIONI if _classe=="PA" else PM_INTERROGAZIONI
 	elif (_giust):
@@ -156,7 +182,7 @@ def nuova_generic (request, _classe, _interr, _giust):
 
 def rimuovi_generic (request, _classe, _interr, _giust):
 	valore="interrogazione" if _interr else "giustificazione"
-	classe=PA if _classe=="1A" else PM
+	classe=PA if _classe=="PA" else PM
 	if _interr:
 		classe_azione=PA_INTERROGAZIONI if _classe=="PA" else PM_INTERROGAZIONI
 	else:
@@ -247,3 +273,29 @@ def rimuovi_giustificazione(request, _classe):
 		}
 		return render(request, "modifica_giustificazione.html", context)
 
+def crea_interrogazione(request, _classe):
+	classe=PA if _classe=="PA" else PM
+	_stud_id=request.GET.get('stud_id')
+	_studente=None
+	if _stud_id:
+		try:
+			_studente=classe.objects.get(stud_id=_stud_id)
+		except Exception as e:
+			return HttpResponse("404 Studente non trovato, controllare id")
+	else:
+		_nome=request.GET.get('nome')
+		_cognome=request.GET.get('cognome')
+		try:
+			_studente=classe.objects.get(nome=_nome, cognome=_cognome)
+		except Exception as e:
+			return HttpResponse("404 Studente non trovato, controllare nome e cognome")
+
+	if not(_studente):
+			return HttpResponse("Come ci sei arrivato qua?")
+	else:
+		context = {
+			"studente" : _studente,
+			"classe_" : _classe,
+			"classe": ("1A" if _classe=="PA" else "1M"),
+		}
+		return render(request, "nuova_interrogazione.html", context)
