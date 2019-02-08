@@ -78,6 +78,7 @@
 <script type="text/javascript">
 	$("td").on("click", giustifica);
 	$("td").on("click", interroga);
+	$("th").on("click", nuova_interrogazione);
 
 	function giustifica() {
     var $td = $(this),
@@ -128,7 +129,7 @@
 			  win.focus();
 			}
     }
-    else if ($th.text()!="Oggi" && $th.attr('id')!="Giustifica"){
+    else if ($th.text()!="Oggi" && $th.attr('id')!="Giustifica" && $td.text()!=""){
     	var $row = $(this).closest("tr"),// Finds the closest row <tr> 
 			    $id = $row.find("td:nth-child(1)"),
 			    $cognome = $row.find("td:nth-child(2)"),
@@ -141,6 +142,12 @@
 			}
     }
 	}
+
+	function nuova_interrogazione(){
+		if ($(this).text()=="Oggi"){
+	   	window.location.href="/{{ classe_ }}/interrogazioni/random";
+	  }
+  }
 
 </script>
 </body>

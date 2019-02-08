@@ -299,3 +299,57 @@ def crea_interrogazione(request, _classe):
 			"classe": ("1A" if _classe=="PA" else "1M"),
 		}
 		return render(request, "nuova_interrogazione.html", context)
+
+def random_interrogazione (request, _classe):
+	classe=PA if _classe=="PA" else PM
+	classe_interr=PA_INTERROGAZIONI if _classe=="PA" else PM_INTERROGAZIONI
+	stud_inter=[]
+	studenti = classe.objects.all()
+	for studente in studenti:
+		stud_inter.append({"studente": studente, "interr": 0})
+
+	interrogazioni=classe_interr.objects.all()
+	for interrogazione in interrogazioni:
+		for entry in stud_inter:
+			if entry['studente']==interrogazione.studente:
+				entry['interr']=entry['interr']+1
+
+	media=len(interrogazioni)/len(studenti)
+
+	candidati=[]
+	for entry in stud_inter:
+		if entry['interr']<media:
+			candidati.append(entry['studente'])
+
+	import random
+	random.seed()
+	prescelto=candidati[random.randint(0, len(candidati)-1)]
+
+	print(prescelto)
+	print(type(prescelto))
+	context={
+		"studente" : prescelto
+	}
+	return render(request, "nuova_interrogazione.html", context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
