@@ -291,7 +291,7 @@ def crea_interrogazione(request, _classe):
 			return HttpResponse("404 Studente non trovato, controllare nome e cognome")
 
 	if not(_studente):
-			return HttpResponse("Come ci sei arrivato qua?")
+		return HttpResponse("Come ci sei arrivato qua?")
 	else:
 		context = {
 			"studente" : _studente,
