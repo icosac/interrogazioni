@@ -93,7 +93,5 @@ def fill_PM():
 	alunno.save()
 	alunno=PM(stud_id=22, nome="Simone", cognome="Smider")
 	alunno.save()
-	alunno=PM(stud_id=23, nome="Mykola", cognome="Yevtykhii")
-	alunno.save()
 	alunno=PM(stud_id=24, nome="Rey", cognome="Zuccati")
 	alunno.save()
